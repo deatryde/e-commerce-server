@@ -4,7 +4,6 @@ const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const { jwtSecret } = require("../config/keys");
 const config = require("../config/keys");
 
 router.get("/", (req, res) => {
@@ -25,7 +24,7 @@ router.post(
     }
     try {
       const { name, email, password } = req.body;
-      let user = await User.findOne({ email: email });
+      let user = await User.findOne({ email });
       if (user) {
         console.log(user);
         return res
