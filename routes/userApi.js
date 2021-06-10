@@ -12,10 +12,12 @@ router.get("/", (req, res) => {
 
 router.post(
   "/",
-  body("name", "Name is required"),
+  body("name", "Name is required").isLength({
+    min: 5,
+  }),
   body("email", "Please enter a valid email").isEmail(),
   body("password", "Password should have atleast 8 characters").isLength({
-    min: 8,
+    min: 5,
   }),
   async (req, res) => {
     const errors = validationResult(req);
@@ -23,7 +25,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
     try {
-      const { name, email, password } = req.body;
+      const { name, email, password, role } = req.body;
       let user = await User.findOne({ email });
       if (user) {
         console.log(user);
@@ -35,6 +37,7 @@ router.post(
         name,
         email,
         password,
+        role,
       });
 
       const salt = bcrypt.genSaltSync(10);
