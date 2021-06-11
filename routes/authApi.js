@@ -58,7 +58,7 @@ router.post(
       );
       //res.send("Users Created");
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(500).send("Server error");
     }
   }
