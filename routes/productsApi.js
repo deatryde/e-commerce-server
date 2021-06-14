@@ -66,4 +66,15 @@ router.post(
   }
 );
 
+//user specific products api
+router.get("/instructors/:id", auth, async (req, res) => {
+  try {
+    const products = await Product.find({ userId: req.params.id });
+    res.json(products);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
+  }
+});
+
 module.exports = router;
