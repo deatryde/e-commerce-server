@@ -36,9 +36,9 @@ router.get("/", auth, async (req, res) => {
 
 router.put("/:id", auth, async (req, res) => {
   try {
-    const cartId = req.params.cartId;
+    const cartId = req.params.id;
     const product = req.body.product;
-    const cart = await Cart.updateOne(
+    const cart = await Cart.updateMany(
       { _id: cartId },
       { $pullAll: { products: [product] } }
     );
@@ -53,11 +53,11 @@ router.post("/", auth, async (req, res) => {
   try {
     const userId = req.user.id;
     const { products } = req.body;
-    let cart, unfulfilledCart;
+    let cart, unfulfiledCart;
     const carts = await Cart.find({ userId });
     const hasValidCarts = carts.reduce((acc, value) => {
       if (!value.fulfilled) {
-        unfulfilledCart = value;
+        unfulfiledCart = value;
       }
       return acc && value.fulfilled;
     }, true);
@@ -65,21 +65,20 @@ router.post("/", auth, async (req, res) => {
       cart = new Cart({ userId, products });
       cart = await cart.save();
     } else {
-      const stringProduct = [...unfulfilledCart.products, ...products].map(
+      const stringProduct = [...unfulfiledCart.products, ...products].map(
         (product) => product.toString()
       );
       const newProducts = Array.from(new Set(stringProduct));
       cart = await Cart.findByIdAndUpdate(
-        { _id: unfulfilledCart._id },
+        { _id: unfulfiledCart._id },
         { products: newProducts }
       );
     }
     let value = cart.products.map(async (id) => await Product.findById(id));
     value = await Promise.all(value);
     res.send({ ...cart.toJSON(), products: value });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Server error");
+  } catch (err) {
+    res.send(err);
   }
 });
 
