@@ -11,7 +11,7 @@ const CartSchema = new Schema(
       required: true,
     },
     fulfilled: {
-      type: Booleon,
+      type: Boolean,
       default: false,
     },
   },
