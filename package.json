@@ -4,8 +4,11 @@
   "description": "Express Server",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "script": "node server.js"
+    "run-test": "nyc mocha --exit test/**/**/*.test.js",
+    "test": "nyc --reporter=lcov npm run run-test",
+    "view-coverage": "cd coverage/lcov-report/ && lite-server && ../../",
+    "script": "node server.js",
+    "server": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -14,7 +17,7 @@
   "keywords": [
     "server"
   ],
-  "author": "deatryde",
+  "author": "rahul dogra",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/DEATRYDE/e-commerce-server/issues"
@@ -32,5 +35,15 @@
     "morgan": "^1.10.0",
     "nodemon": "^2.0.12",
     "stripe": "^8.168.0"
+  },
+  "devDependencies": {
+    "assert": "^1.5.0",
+    "mocha": "^5.2.0",
+    "nyc": "^15.1.0"
+  },
+  "nyc": {
+    "include": [
+      "**/server/**/*.js"
+    ]
   }
 }
