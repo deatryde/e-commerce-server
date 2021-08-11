@@ -11,7 +11,7 @@ script:
 
 after_success:
   #drcypt environment variables
-  - openssl enc -aes256 -d -in .enc -out .env-k $SECRET_KEY
+  - openssl enc -aes256 -d -in .enc -out .env -k $SECRET_KEY
   #build production grade dockerfile
   - docker build -t rahuldogra/server .
   - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_ID" --password-stdin
